@@ -37,10 +37,19 @@ const AWS_REGION = process.env.AWS_REGION || "";
 const AWS_S3_BUCKET = process.env.AWS_S3_BUCKET || "";
 const AWS_S3_PUBLIC_BASE_URL = process.env.AWS_S3_PUBLIC_BASE_URL || "";
 
-const corsOrigins = (process.env.CORS_ORIGIN || "http://localhost:3000")
-  .split(",")
-  .map((origin) => origin.trim())
-  .filter(Boolean);
+const defaultCorsOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "https://jeffrey-usman-portfolio.netlify.app",
+];
+
+const corsOrigins = [
+  ...defaultCorsOrigins,
+  ...(process.env.CORS_ORIGIN || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+];
 
 const corsOptions = {
   origin(origin, callback) {
