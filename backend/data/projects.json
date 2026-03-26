@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "title": "Sales Data Cleaning & Power BI Dashboard",
+    "description": "Transformed raw sales data and built an interactive Power BI dashboard for executive insights.",
+    "tags": [
+      "SQL",
+      "PowerBI",
+      "Pandas"
+    ],
+    "imageURL": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
+    "caseStudy": "## Problem Statement\nThe client had inconsistent sales data across multiple sources, making it difficult to track performance and identify trends.\n\n## Dataset Description\nRaw sales CSVs from 3 regions, 50k+ rows with inconsistent formatting, missing values, and duplicate entries.\n\n## Cleaning Steps\n- Removed duplicate records using Python Pandas\n- Standardized date formats across all regions\n- Merged regional files using SQL UNION operations\n- Handled missing values with appropriate imputation strategies\n\n## Analysis Approach\n- Used Pandas for initial data cleaning and exploration\n- SQL for complex aggregations and joins\n- Built interactive Power BI dashboard with drill-down capabilities\n- Created KPI cards for quick insights\n\n## Business Insight\nIdentified underperforming regions (15% below average) and discovered strong seasonal trends in Q4, leading to optimized inventory planning and targeted marketing campaigns."
+  },
+  {
+    "id": 2,
+    "title": "Customer Churn Analysis with Python & SQL",
+    "description": "Analyzed telecom churn data, cleaned with Pandas, and delivered actionable insights.",
+    "tags": [
+      "SQL",
+      "Python",
+      "Pandas"
+    ],
+    "imageURL": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
+    "caseStudy": "## Problem Statement\nHigh churn rate (28%) in telecom subscribers was impacting revenue and customer lifetime value.\n\n## Dataset Description\nCustomer records with 20+ features including usage logs, billing history, support tickets, and churn labels (25,000 customers).\n\n## Cleaning Steps\n- Handled missing values in usage columns using median imputation\n- Encoded categorical variables (contract type, payment method)\n- Removed outliers in billing amounts using IQR method\n- Created new features from date columns (tenure, days since last support ticket)\n\n## Analysis Approach\n- SQL for feature engineering and data aggregation\n- Pandas for exploratory data analysis and visualization\n- Correlation analysis to identify key churn indicators\n- Logistic regression modeling to predict high-risk customers\n\n## Business Insight\nPredicted high-risk customers with 82% accuracy. Found that customers with month-to-month contracts and electronic check payment had 3x higher churn rate. Recommended retention strategies including contract incentives and payment method diversification, projected to reduce churn by 12%."
+  },
+  {
+    "id": 3,
+    "title": "E-Commerce Analytics Dashboard",
+    "description": "Built comprehensive analytics dashboard to track KPIs and user behavior patterns.",
+    "tags": [
+      "SQL",
+      "PowerBI"
+    ],
+    "imageURL": "https://images.unsplash.com/photo-1556155092-490a1ba16284?w=800&h=600&fit=crop",
+    "caseStudy": "## Problem Statement\nE-commerce platform lacked unified view of customer behavior, sales performance, and marketing effectiveness.\n\n## Dataset Description\nTransaction data (100k+ orders), user behavior logs, marketing campaign data, and product catalog information.\n\n## Cleaning Steps\n- Standardized product categories across multiple sources\n- Removed test transactions and internal orders\n- Validated and corrected currency conversions\n- Aggregated multiple data sources into unified data warehouse\n\n## Analysis Approach\n- Designed star schema data model in SQL\n- Created calculated measures for conversion rate, AOV, LTV\n- Built Power BI dashboard with real-time refresh\n- Implemented role-based access for different stakeholders\n\n## Business Insight\nIdentified that mobile users had 40% lower conversion rate but higher average order value. Recommended mobile UX improvements and targeted campaigns, resulting in 18% increase in mobile revenue within 2 months."
+  }
+]

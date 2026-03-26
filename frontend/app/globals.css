@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #f8fafc;
+  color: #0f172a;
+  min-height: 100vh;
+}
+
+.dark body {
+  background: linear-gradient(135deg, #2d2017 0%, #231a15 60%, #1a120d 100%);
+  color: #f1f5f9;
+}
+
+/* Improved focus states for accessibility */
+*:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e2e8f0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #10b981;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #1a120d;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #64748b;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #10b981;
+}
+
+/* Light mode overrides for existing dark-first utility classes */
+.light .bg-cardGlass {
+  background-color: rgba(255, 255, 255, 0.85);
+}
+
+.light .border-slate-800 {
+  border-color: #e2e8f0;
+}
+
+.light .border-slate-700 {
+  border-color: #e2e8f0;
+}
+
+.light .border-slate-600 {
+  border-color: #cbd5e1;
+}
+
+.light .text-slate-100 {
+  color: #0f172a;
+}
+
+.light .text-slate-200 {
+  color: #1e293b;
+}
+
+.light .text-slate-300 {
+  color: #334155;
+}
+
+.light .text-slate-400 {
+  color: #475569;
+}
+
+.light .bg-slate-900\/30 {
+  background-color: rgba(15, 23, 42, 0.06);
+}
+
+.light .bg-slate-900\/80 {
+  background-color: rgba(255, 255, 255, 0.88);
+}
+
+.light .bg-slate-900\/90 {
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.light .bg-slate-800 {
+  background-color: #f1f5f9;
+}
+
+.light .bg-slate-700 {
+  background-color: #e2e8f0;
+}
+
+.light .bg-accent-slate\/20 {
+  background-color: rgba(100, 116, 139, 0.12);
+}
+
+.light .bg-accent-emerald\/10 {
+  background-color: rgba(16, 185, 129, 0.12);
+}
+
+.light .bg-accent-emerald\/20 {
+  background-color: rgba(16, 185, 129, 0.18);
+}
+
+/* Utility classes */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Orbiting badges around hero text */
+.orbit-scene {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  width: 140%;
+  height: 140%;
+  transform: translate(-50%, -50%);
+}
+
+.orbit-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 0.45rem 1rem;
+  transform-style: preserve-3d;
+  animation: orbit 22s linear infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes orbit {
+  0% {
+    transform: rotateX(12deg) rotateZ(0deg) translateX(var(--radius, 180px))
+      rotateZ(0deg) translateZ(10px) rotateY(var(--tilt, 12deg));
+  }
+  100% {
+    transform: rotateX(12deg) rotateZ(360deg) translateX(var(--radius, 180px))
+      rotateZ(-360deg) translateZ(10px) rotateY(var(--tilt, 12deg));
+  }
+}
