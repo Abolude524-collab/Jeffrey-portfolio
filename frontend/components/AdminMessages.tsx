@@ -4,7 +4,7 @@ import { Mail, User, Calendar, ArrowLeft, RefreshCw, Phone } from "lucide-react"
 import Link from "next/link";
 import type { Message } from "@/types";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
 export default function AdminMessages() {
     const [messages, setMessages] = useState<Message[]>([]);

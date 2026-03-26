@@ -4,7 +4,7 @@ import ProjectCard from "./ProjectCard";
 import CaseStudyModal from "./CaseStudyModal";
 import type { Project } from "@/types";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
 /** Animated skeleton placeholder that matches ProjectCard dimensions */
 function SkeletonCard() {
