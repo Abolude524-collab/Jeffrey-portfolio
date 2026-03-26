@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/api/*"
+  to = "https://jeffrey-portfolio-vni4.onrender.com/api/:splat"
+  status = 200
+  force = true

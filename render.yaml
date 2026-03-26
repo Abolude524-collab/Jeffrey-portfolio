@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: jeffrey-portfolio-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true
