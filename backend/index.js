@@ -478,18 +478,33 @@ app.post("/api/admin/logout", requireAdminAuth, (req, res) => {
 
 app.get("/api/messages", requireAdminAuth, async (req, res) => {
   try {
-    const messages = await Message.find({}).sort({ date: -1 }).lean();
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.max(1, Math.min(100, parseInt(req.query.limit) || 20));
+    const skip = (page - 1) * limit;
 
-    res.json(
-      messages.map((messageDoc) => ({
+    const total = await Message.countDocuments({});
+    const messages = await Message.find({})
+      .sort({ date: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    res.json({
+      messages: messages.map((messageDoc) => ({
         id: messageDoc._id.toString(),
         name: messageDoc.name,
         email: messageDoc.email,
         phone: messageDoc.phone || undefined,
         message: messageDoc.message,
         date: messageDoc.date,
-      }))
-    );
+      })),
+      pagination: {
+        total,
+        page,
+        pages: Math.ceil(total / limit),
+        limit,
+      },
+    });
   } catch (error) {
     console.error("Error fetching messages:", error);
     res.status(500).json({ error: "Failed to fetch messages" });

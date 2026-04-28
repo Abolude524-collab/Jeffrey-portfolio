@@ -9,21 +9,21 @@ module.exports = {
     extend: {
       colors: {
         background: {
-          DEFAULT: '#231a15',
-          gradientFrom: '#2d2017',
-          gradientTo: '#1a120d',
+          DEFAULT: '#09090b',
+          gradientFrom: '#18181b',
+          gradientTo: '#09090b',
         },
         accent: {
-          emerald: '#10b981',
-          slate: '#64748b',
+          blue: '#3b82f6',
+          zinc: '#71717a',
         },
-        cardGlass: 'rgba(36, 28, 22, 0.7)',
+        cardGlass: 'rgba(24, 24, 27, 0.7)',
       },
       borderRadius: {
         glass: '1.25rem',
       },
       boxShadow: {
-        glass: '0 4px 32px 0 rgba(16, 185, 129, 0.12)',
+        glass: '0 4px 32px 0 rgba(59, 130, 246, 0.12)', // Updated to blue shadow
       },
     },
   },
