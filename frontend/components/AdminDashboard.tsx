@@ -106,7 +106,7 @@ export default function AdminDashboard() {
   if (loading) {
     return (
       <section className="flex items-center justify-center min-h-screen">
-        <div className="text-slate-400">Loading...</div>
+        <div className="text-zinc-400">Loading...</div>
       </section>
     );
   }
@@ -114,17 +114,17 @@ export default function AdminDashboard() {
   if (!isAuthenticated) {
     return (
       <section className="max-w-md mx-auto py-12 px-4 min-h-screen flex items-center justify-center">
-        <div className="w-full bg-cardGlass backdrop-blur-md rounded-glass shadow-glass border border-slate-800 p-8">
-          <h1 className="text-2xl font-bold mb-2 text-emerald-400 text-center">
+        <div className="w-full bg-cardGlass backdrop-blur-md rounded-glass shadow-glass border border-zinc-800 p-8">
+          <h1 className="text-2xl font-bold mb-2 text-blue-400 text-center">
             Admin Dashboard
           </h1>
-          <p className="text-slate-300 text-sm text-center mb-6">
+          <p className="text-zinc-300 text-sm text-center mb-6">
             Manage your portfolio
           </p>
 
           <form onSubmit={handleLogin} className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              <label htmlFor="username" className="text-slate-200 text-sm">
+              <label htmlFor="username" className="text-zinc-200 text-sm">
                 Username
               </label>
               <input
@@ -133,13 +133,13 @@ export default function AdminDashboard() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
-                className="bg-transparent border border-slate-700 rounded px-3 py-2 text-slate-100 focus:outline-none focus:border-accent-emerald text-sm"
+                className="bg-transparent border border-zinc-700 rounded px-3 py-2 text-zinc-100 focus:outline-none focus:border-blue-500 text-sm"
                 placeholder="owner"
               />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="password" className="text-slate-200 text-sm">
+              <label htmlFor="password" className="text-zinc-200 text-sm">
                 Password
               </label>
               <input
@@ -148,13 +148,13 @@ export default function AdminDashboard() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="bg-transparent border border-slate-700 rounded px-3 py-2 text-slate-100 focus:outline-none focus:border-accent-emerald text-sm"
+                className="bg-transparent border border-zinc-700 rounded px-3 py-2 text-zinc-100 focus:outline-none focus:border-blue-500 text-sm"
               />
             </div>
 
             <button
               type="submit"
-              className="mt-2 px-6 py-2 rounded-full bg-accent-emerald text-white font-semibold hover:bg-emerald-600 transition-colors"
+              className="mt-2 px-6 py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition-colors"
             >
               Login
             </button>
@@ -166,7 +166,7 @@ export default function AdminDashboard() {
 
           <Link
             href="/"
-            className="mt-6 flex items-center justify-center gap-2 text-slate-400 hover:text-accent-emerald transition-colors"
+            className="mt-6 flex items-center justify-center gap-2 text-zinc-400 hover:text-blue-500 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Home
@@ -177,12 +177,12 @@ export default function AdminDashboard() {
   }
 
   return (
-    <section className="min-h-screen bg-slate-900">
-      <header className="sticky top-0 z-30 bg-cardGlass backdrop-blur-md border-b border-slate-800">
+    <section className="min-h-screen bg-zinc-900">
+      <header className="sticky top-0 z-30 bg-cardGlass backdrop-blur-md border-b border-zinc-800">
         <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
           <div>
-            <h1 className="text-xl font-bold text-emerald-400">Dashboard</h1>
-            <p className="text-xs text-slate-400">
+            <h1 className="text-xl font-bold text-blue-400">Dashboard</h1>
+            <p className="text-xs text-zinc-400">
               Logged in as {adminUser?.username}
             </p>
           </div>
@@ -197,13 +197,13 @@ export default function AdminDashboard() {
       </header>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="flex gap-4 mb-8 border-b border-slate-800">
+        <div className="flex gap-4 mb-8 border-b border-zinc-800">
           <button
             onClick={() => setTab("projects")}
             className={`pb-4 px-4 font-semibold transition-colors ${
               tab === "projects"
-                ? "text-emerald-400 border-b-2 border-emerald-400"
-                : "text-slate-400 hover:text-slate-300"
+                ? "text-blue-400 border-b-2 border-blue-400"
+                : "text-zinc-400 hover:text-zinc-300"
             }`}
           >
             Projects ({tab === "projects" ? "🔄" : "📋"})
@@ -212,8 +212,8 @@ export default function AdminDashboard() {
             onClick={() => setTab("media")}
             className={`pb-4 px-4 font-semibold transition-colors ${
               tab === "media"
-                ? "text-emerald-400 border-b-2 border-emerald-400"
-                : "text-slate-400 hover:text-slate-300"
+                ? "text-blue-400 border-b-2 border-blue-400"
+                : "text-zinc-400 hover:text-zinc-300"
             }`}
           >
             Media ({tab === "media" ? "🔄" : "📸"})
@@ -222,8 +222,8 @@ export default function AdminDashboard() {
             onClick={() => setTab("messages")}
             className={`pb-4 px-4 font-semibold transition-colors ${
               tab === "messages"
-                ? "text-emerald-400 border-b-2 border-emerald-400"
-                : "text-slate-400 hover:text-slate-300"
+                ? "text-blue-400 border-b-2 border-blue-400"
+                : "text-zinc-400 hover:text-zinc-300"
             }`}
           >
             Messages ({tab === "messages" ? "🔄" : "💬"})
@@ -236,7 +236,7 @@ export default function AdminDashboard() {
 
         <Link
           href="/"
-          className="mt-8 inline-flex items-center gap-2 text-slate-400 hover:text-accent-emerald transition-colors"
+          className="mt-8 inline-flex items-center gap-2 text-zinc-400 hover:text-blue-500 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Portfolio
@@ -281,10 +281,10 @@ function ProjectsTab({ token }: { token: string }) {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-slate-100">Projects</h2>
+        <h2 className="text-2xl font-bold text-zinc-100">Projects</h2>
         <button
           onClick={() => setShowCreate(!showCreate)}
-          className="flex items-center gap-2 px-4 py-2 bg-accent-emerald text-white rounded-lg hover:bg-emerald-600 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
         >
           <Plus className="w-4 h-4" />
           New Project
@@ -294,11 +294,11 @@ function ProjectsTab({ token }: { token: string }) {
       {showCreate && <ProjectForm token={token} onSuccess={() => {setShowCreate(false); fetchProjects();}} />}
 
       {loading ? (
-        <div className="text-slate-400">Loading projects...</div>
+        <div className="text-zinc-400">Loading projects...</div>
       ) : error ? (
         <div className="text-red-400">{error}</div>
       ) : projects.length === 0 ? (
-        <div className="text-slate-400 text-center py-8">No projects yet.</div>
+        <div className="text-zinc-400 text-center py-8">No projects yet.</div>
       ) : (
         <div className="space-y-4">
           {projects.map((project) => (
@@ -435,9 +435,9 @@ function ProjectForm({ token, project, onSuccess }: ProjectFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-cardGlass backdrop-blur-md rounded-glass p-6 space-y-4 border border-slate-800"
+      className="bg-cardGlass backdrop-blur-md rounded-glass p-6 space-y-4 border border-zinc-800"
     >
-      <h3 className="text-lg font-bold text-emerald-400">
+      <h3 className="text-lg font-bold text-blue-400">
         {project ? "Edit Project" : "New Project"}
       </h3>
 
@@ -445,59 +445,59 @@ function ProjectForm({ token, project, onSuccess }: ProjectFormProps) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="text-slate-200 text-sm">Title *</label>
+          <label className="text-zinc-200 text-sm">Title *</label>
           <input
             type="text"
             name="title"
             value={formData.title}
             onChange={handleInputChange}
             required
-            className="w-full mt-1 bg-transparent border border-slate-700 rounded px-3 py-2 text-slate-100"
+            className="w-full mt-1 bg-transparent border border-zinc-700 rounded px-3 py-2 text-zinc-100"
           />
         </div>
 
         <div>
-          <label className="text-slate-200 text-sm">Display Order</label>
+          <label className="text-zinc-200 text-sm">Display Order</label>
           <input
             type="number"
             name="displayOrder"
             value={formData.displayOrder}
             onChange={handleInputChange}
-            className="w-full mt-1 bg-transparent border border-slate-700 rounded px-3 py-2 text-slate-100"
+            className="w-full mt-1 bg-transparent border border-zinc-700 rounded px-3 py-2 text-zinc-100"
           />
         </div>
       </div>
 
       <div>
-        <label className="text-slate-200 text-sm">Short Description *</label>
+        <label className="text-zinc-200 text-sm">Short Description *</label>
         <textarea
           name="shortDescription"
           value={formData.shortDescription}
           onChange={handleInputChange}
           required
           rows={2}
-          className="w-full mt-1 bg-transparent border border-slate-700 rounded px-3 py-2 text-slate-100"
+          className="w-full mt-1 bg-transparent border border-zinc-700 rounded px-3 py-2 text-zinc-100"
         />
       </div>
 
       <div>
-        <label className="text-slate-200 text-sm">Tags (comma-separated) *</label>
+        <label className="text-zinc-200 text-sm">Tags (comma-separated) *</label>
         <input
           type="text"
           name="tags"
           value={formData.tags}
           onChange={handleInputChange}
           required
-          className="w-full mt-1 bg-transparent border border-slate-700 rounded px-3 py-2 text-slate-100"
+          className="w-full mt-1 bg-transparent border border-zinc-700 rounded px-3 py-2 text-zinc-100"
           placeholder="SQL, Python, PowerBI"
         />
       </div>
 
       <div>
-        <label className="text-slate-200 text-sm">Cover Image *</label>
+        <label className="text-zinc-200 text-sm">Cover Image *</label>
         <div className="mt-2 flex items-center gap-4">
           {coverImage?.url && (
-            <div className="w-20 h-20 rounded border border-slate-700 overflow-hidden">
+            <div className="w-20 h-20 rounded border border-zinc-700 overflow-hidden">
               <img
                 src={coverImage.url}
                 alt="Cover"
@@ -505,7 +505,7 @@ function ProjectForm({ token, project, onSuccess }: ProjectFormProps) {
               />
             </div>
           )}
-          <label className="px-4 py-2 bg-accent-slate/20 text-slate-300 rounded cursor-pointer hover:bg-accent-slate/30 transition-colors flex items-center gap-2">
+          <label className="px-4 py-2 bg-zinc-500/20 text-zinc-300 rounded cursor-pointer hover:bg-zinc-500/30 transition-colors flex items-center gap-2">
             <Upload className="w-4 h-4" />
             <span>{coverImage ? "Change" : "Upload"}</span>
             <input
@@ -519,49 +519,49 @@ function ProjectForm({ token, project, onSuccess }: ProjectFormProps) {
       </div>
 
       <div>
-        <label className="text-slate-200 text-sm">Case Study (Markdown) *</label>
+        <label className="text-zinc-200 text-sm">Case Study (Markdown) *</label>
         <textarea
           name="caseStudyMarkdown"
           value={formData.caseStudyMarkdown}
           onChange={handleInputChange}
           required
           rows={6}
-          className="w-full mt-1 bg-transparent border border-slate-700 rounded px-3 py-2 text-slate-100 font-mono text-xs"
+          className="w-full mt-1 bg-transparent border border-zinc-700 rounded px-3 py-2 text-zinc-100 font-mono text-xs"
           placeholder="## Problem Statement&#10;...&#10;## Solution"
         />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="text-slate-200 text-sm">Project URL (optional)</label>
+          <label className="text-zinc-200 text-sm">Project URL (optional)</label>
           <input
             type="url"
             name="projectUrl"
             value={formData.projectUrl}
             onChange={handleInputChange}
-            className="w-full mt-1 bg-transparent border border-slate-700 rounded px-3 py-2 text-slate-100"
+            className="w-full mt-1 bg-transparent border border-zinc-700 rounded px-3 py-2 text-zinc-100"
           />
         </div>
 
         <div>
-          <label className="text-slate-200 text-sm">GitHub URL (optional)</label>
+          <label className="text-zinc-200 text-sm">GitHub URL (optional)</label>
           <input
             type="url"
             name="githubUrl"
             value={formData.githubUrl}
             onChange={handleInputChange}
-            className="w-full mt-1 bg-transparent border border-slate-700 rounded px-3 py-2 text-slate-100"
+            className="w-full mt-1 bg-transparent border border-zinc-700 rounded px-3 py-2 text-zinc-100"
           />
         </div>
       </div>
 
       <div>
-        <label className="text-slate-200 text-sm">Status</label>
+        <label className="text-zinc-200 text-sm">Status</label>
         <select
           name="status"
           value={formData.status}
           onChange={handleInputChange}
-          className="w-full mt-1 bg-transparent border border-slate-700 rounded px-3 py-2 text-slate-100"
+          className="w-full mt-1 bg-transparent border border-zinc-700 rounded px-3 py-2 text-zinc-100"
         >
           <option value="draft">Draft</option>
           <option value="published">Published</option>
@@ -573,7 +573,7 @@ function ProjectForm({ token, project, onSuccess }: ProjectFormProps) {
       <button
         type="submit"
         disabled={submitting}
-        className="px-6 py-2 bg-accent-emerald text-white rounded-lg hover:bg-emerald-600 transition-colors disabled:bg-slate-600"
+        className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:bg-zinc-600"
       >
         {submitting ? "Saving..." : project ? "Update Project" : "Create Project"}
       </button>
@@ -615,27 +615,27 @@ function ProjectCard({ project, token, onUpdated }: ProjectCardProps) {
   };
 
   return (
-    <div className="bg-cardGlass backdrop-blur-md rounded-glass p-4 border border-slate-800">
+    <div className="bg-cardGlass backdrop-blur-md rounded-glass p-4 border border-zinc-800">
       <div
         className="flex items-start justify-between cursor-pointer"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex-1">
-          <h4 className="font-semibold text-slate-100">{project.title}</h4>
-          <p className="text-xs text-slate-400 mt-1">
-            Status: <span className="text-emerald-400">{project.status}</span> •
+          <h4 className="font-semibold text-zinc-100">{project.title}</h4>
+          <p className="text-xs text-zinc-400 mt-1">
+            Status: <span className="text-blue-400">{project.status}</span> •
             Order: {project.displayOrder}
           </p>
         </div>
         <ChevronDown
-          className={`w-4 h-4 text-slate-400 transition-transform ${
+          className={`w-4 h-4 text-zinc-400 transition-transform ${
             isExpanded ? "rotate-180" : ""
           }`}
         />
       </div>
 
       {isExpanded && (
-        <div className="mt-4 space-y-3 border-t border-slate-700 pt-4">
+        <div className="mt-4 space-y-3 border-t border-zinc-700 pt-4">
           {project.coverImage?.url && (
             <div className="w-full h-32 rounded overflow-hidden">
               <img
@@ -647,17 +647,17 @@ function ProjectCard({ project, token, onUpdated }: ProjectCardProps) {
           )}
 
           <div>
-            <p className="text-xs font-semibold text-slate-300">Description</p>
-            <p className="text-xs text-slate-400">{project.shortDescription}</p>
+            <p className="text-xs font-semibold text-zinc-300">Description</p>
+            <p className="text-xs text-zinc-400">{project.shortDescription}</p>
           </div>
 
           <div>
-            <p className="text-xs font-semibold text-slate-300">Tags</p>
+            <p className="text-xs font-semibold text-zinc-300">Tags</p>
             <div className="flex gap-1 mt-1 flex-wrap">
               {project.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-xs px-2 py-1 bg-accent-slate/20 rounded"
+                  className="text-xs px-2 py-1 bg-zinc-500/20 rounded"
                 >
                   {tag}
                 </span>
@@ -665,13 +665,13 @@ function ProjectCard({ project, token, onUpdated }: ProjectCardProps) {
             </div>
           </div>
 
-          <div className="flex gap-2 pt-2 border-t border-slate-700">
+          <div className="flex gap-2 pt-2 border-t border-zinc-700">
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 alert("Edit feature coming soon - use form above");
               }}
-              className="px-3 py-1 text-xs bg-accent-emerald/20 text-emerald-400 rounded hover:bg-accent-emerald/30"
+              className="px-3 py-1 text-xs bg-blue-500/20 text-blue-400 rounded hover:bg-blue-500/30"
             >
               Edit
             </button>
@@ -698,9 +698,9 @@ function ProjectCard({ project, token, onUpdated }: ProjectCardProps) {
 function MediaTab({ token }: { token: string }) {
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-slate-100">Media Library</h2>
-      <div className="bg-cardGlass backdrop-blur-md rounded-glass p-8 text-center border border-slate-800">
-        <p className="text-slate-400">
+      <h2 className="text-2xl font-bold text-zinc-100">Media Library</h2>
+      <div className="bg-cardGlass backdrop-blur-md rounded-glass p-8 text-center border border-zinc-800">
+        <p className="text-zinc-400">
           Images are uploaded when creating/editing projects. Media management
           coming soon.
         </p>
@@ -744,41 +744,41 @@ function MessagesTab({ token }: { token: string }) {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-slate-100">Contact Messages</h2>
+        <h2 className="text-2xl font-bold text-zinc-100">Contact Messages</h2>
         <button
           onClick={fetchMessages}
-          className="px-4 py-2 bg-accent-slate/20 text-slate-300 rounded hover:bg-accent-slate/30"
+          className="px-4 py-2 bg-zinc-500/20 text-zinc-300 rounded hover:bg-zinc-500/30"
         >
           Refresh
         </button>
       </div>
 
       {loading ? (
-        <div className="text-slate-400">Loading messages...</div>
+        <div className="text-zinc-400">Loading messages...</div>
       ) : error ? (
         <div className="text-red-400">{error}</div>
       ) : messages.length === 0 ? (
-        <div className="text-slate-400 text-center py-8">No messages yet.</div>
+        <div className="text-zinc-400 text-center py-8">No messages yet.</div>
       ) : (
         <div className="space-y-4">
           {messages.map((msg) => (
             <div
               key={msg.id}
-              className="bg-cardGlass backdrop-blur-md rounded-glass p-4 border border-slate-800"
+              className="bg-cardGlass backdrop-blur-md rounded-glass p-4 border border-zinc-800"
             >
               <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
                 <div>
-                  <p className="font-semibold text-slate-100">{msg.name}</p>
-                  <p className="text-xs text-slate-400">{msg.email}</p>
+                  <p className="font-semibold text-zinc-100">{msg.name}</p>
+                  <p className="text-xs text-zinc-400">{msg.email}</p>
                   {msg.phone && (
-                    <p className="text-xs text-slate-400">{msg.phone}</p>
+                    <p className="text-xs text-zinc-400">{msg.phone}</p>
                   )}
                 </div>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-zinc-500">
                   {new Date(msg.date).toLocaleString()}
                 </p>
               </div>
-              <p className="text-slate-300 text-sm whitespace-pre-wrap bg-slate-900/30 rounded p-3">
+              <p className="text-zinc-300 text-sm whitespace-pre-wrap bg-zinc-900/30 rounded p-3">
                 {msg.message}
               </p>
             </div>

@@ -3,22 +3,23 @@ import { useEffect, useState, useMemo } from "react";
 import ProjectCard from "./ProjectCard";
 import CaseStudyModal from "./CaseStudyModal";
 import type { Project } from "@/types";
+import { motion, AnimatePresence } from "framer-motion";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
 /** Animated skeleton placeholder that matches ProjectCard dimensions */
 function SkeletonCard() {
     return (
-        <div className="bg-cardGlass backdrop-blur-md rounded-glass shadow-glass border border-slate-800 p-6 flex flex-col gap-4 animate-pulse">
-            <div className="w-full h-40 rounded-lg bg-slate-700/50" />
-            <div className="h-5 w-3/4 rounded bg-slate-700/50" />
-            <div className="h-4 w-full rounded bg-slate-700/40" />
-            <div className="h-4 w-5/6 rounded bg-slate-700/40" />
+        <div className="bg-cardGlass backdrop-blur-md rounded-glass shadow-glass border border-zinc-800 p-6 flex flex-col gap-4 animate-pulse">
+            <div className="w-full h-40 rounded-lg bg-zinc-700/50" />
+            <div className="h-5 w-3/4 rounded bg-zinc-700/50" />
+            <div className="h-4 w-full rounded bg-zinc-700/40" />
+            <div className="h-4 w-5/6 rounded bg-zinc-700/40" />
             <div className="flex gap-2 mt-auto">
-                <div className="h-6 w-16 rounded bg-slate-700/50" />
-                <div className="h-6 w-16 rounded bg-slate-700/50" />
+                <div className="h-6 w-16 rounded bg-zinc-700/50" />
+                <div className="h-6 w-16 rounded bg-zinc-700/50" />
             </div>
-            <div className="h-9 w-full rounded-lg bg-slate-700/40" />
+            <div className="h-9 w-full rounded-lg bg-zinc-700/40" />
         </div>
     );
 }
@@ -71,8 +72,8 @@ export default function PortfolioGrid() {
                     {tags.map((tag) => (
                         <button
                             key={tag}
-                            className={`px-5 py-2 rounded-full border text-sm font-semibold tracking-wide focus:outline-none focus:ring-2 focus:ring-accent-emerald transition-colors
-                ${filter === tag ? "bg-accent-emerald text-white border-accent-emerald shadow-glass" : "bg-transparent border-slate-700 text-slate-300 hover:bg-accent-emerald/10 hover:text-accent-emerald"}`}
+                            className={`px-5 py-2 rounded-full border text-sm font-semibold tracking-wide focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors
+                ${filter === tag ? "bg-blue-500 text-white border-blue-500 shadow-glass" : "bg-transparent border-zinc-700 text-zinc-300 hover:bg-blue-500/10 hover:text-blue-500"}`}
                             onClick={() => setFilter(filter === tag ? null : tag)}
                             aria-pressed={filter === tag}
                         >
@@ -82,7 +83,7 @@ export default function PortfolioGrid() {
                     {/* Clear filter button */}
                     {filter && (
                         <button
-                            className="ml-2 px-4 py-2 rounded-full bg-slate-700 text-slate-100 text-xs border border-slate-600 font-semibold hover:bg-accent-emerald/20 transition-colors"
+                            className="ml-2 px-4 py-2 rounded-full bg-zinc-700 text-zinc-100 text-xs border border-zinc-600 font-semibold hover:bg-blue-500/20 transition-colors"
                             onClick={() => setFilter(null)}
                         >
                             Clear
@@ -103,17 +104,32 @@ export default function PortfolioGrid() {
                         <p className="text-sm">{error}</p>
                     </div>
                 ) : filtered.length === 0 ? (
-                    <div className="text-slate-400 text-center">No projects found for this filter.</div>
+                    <motion.div
+                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                        className="text-zinc-400 text-center"
+                    >
+                        No projects found for this filter.
+                    </motion.div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {filtered.map((project) => (
-                            <ProjectCard
-                                key={project.id}
-                                project={project}
-                                onViewCaseStudy={() => setSelectedProject(project)}
-                            />
-                        ))}
-                    </div>
+                    <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <AnimatePresence mode="popLayout">
+                            {filtered.map((project) => (
+                                <motion.div
+                                    key={project.id}
+                                    layout
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <ProjectCard
+                                        project={project}
+                                        onViewCaseStudy={() => setSelectedProject(project)}
+                                    />
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
+                    </motion.div>
                 )}
             </section>
 

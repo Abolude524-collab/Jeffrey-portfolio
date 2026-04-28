@@ -1,0 +1,3 @@
+Express API running on port 4000
+MongoDB connected: mongodb://127.0.0.1:27017/portfolio_cms
+CORS origins: http://localhost:3000, http://localhost:3001, https://jeffrey-usman-portfolio.netlify.app
