@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import { useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import type { Project } from "@/types";
+import { splitProjectTags } from "@/utils/projectTagGroups";
 
 interface CaseStudyModalProps {
     project: Project;
@@ -16,6 +17,9 @@ interface CaseStudyModalProps {
  * Uses react-markdown for proper markdown rendering (Fix #4).
  */
 export default function CaseStudyModal({ project, isOpen, onClose }: CaseStudyModalProps) {
+    const { techStack, tools, other } = splitProjectTags(project.tags || []);
+    const fallbackTechStack = techStack.length ? techStack : other;
+
     // Handle ESC key to close modal
     useEffect(() => {
         const handleEscape = (e: KeyboardEvent) => {
@@ -62,16 +66,37 @@ export default function CaseStudyModal({ project, isOpen, onClose }: CaseStudyMo
                     {project.title}
                 </h2>
 
-                {/* Tech stack */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                    {project.tags.map((tag) => (
-                        <span
-                            key={tag}
-                            className="px-3 py-1 bg-accent-slate/20 rounded-full text-sm text-accent-slate border border-accent-slate/30 font-medium"
-                        >
-                            {tag}
-                        </span>
-                    ))}
+                {/* Rewired tag layout for better readability */}
+                <div className="space-y-4 mb-6">
+                    <div>
+                        <h3 className="text-xs uppercase tracking-wide text-slate-400 mb-2">Tech Stack</h3>
+                        <div className="flex flex-wrap gap-2">
+                            {fallbackTechStack.map((tag) => (
+                                <span
+                                    key={`stack-${tag}`}
+                                    className="px-3 py-1 bg-accent-slate/20 rounded-full text-sm text-accent-slate border border-accent-slate/30 font-medium"
+                                >
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+
+                    {tools.length > 0 && (
+                        <div>
+                            <h3 className="text-xs uppercase tracking-wide text-slate-400 mb-2">Tools</h3>
+                            <div className="flex flex-wrap gap-2">
+                                {tools.map((tool) => (
+                                    <span
+                                        key={`tool-${tool}`}
+                                        className="px-3 py-1 bg-accent-emerald/10 rounded-full text-sm text-emerald-400 border border-accent-emerald/30 font-medium"
+                                    >
+                                        {tool}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Case study content rendered with react-markdown (Fix #4) */}

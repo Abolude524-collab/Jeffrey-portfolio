@@ -1,16 +1,8 @@
 "use client";
-import React from "react";
 import Image from "next/image";
-import { BadgeCheck, Database, BarChart2, FileText, Eye } from "lucide-react";
+import { Eye } from "lucide-react";
 import type { Project } from "@/types";
-
-// Map technology tags to Lucide icons for visual clarity (Fix #6: React.ReactElement replaces deprecated JSX.Element)
-const tagIcons: Record<string, React.ReactElement> = {
-    SQL: <Database className="w-4 h-4 text-accent-slate" />,
-    PowerBI: <BarChart2 className="w-4 h-4 text-accent-emerald" />,
-    Pandas: <BadgeCheck className="w-4 h-4 text-accent-emerald" />,
-    Python: <FileText className="w-4 h-4 text-accent-slate" />,
-};
+import { splitProjectTags } from "@/utils/projectTagGroups";
 
 interface ProjectCardProps {
     project: Project;
@@ -22,6 +14,9 @@ interface ProjectCardProps {
  * Shows project image, title, description, tech stack icons, and case study button.
  */
 export default function ProjectCard({ project, onViewCaseStudy }: ProjectCardProps) {
+    const { techStack, tools, other } = splitProjectTags(project.tags || []);
+    const fallbackTechStack = techStack.length ? techStack : other;
+
     return (
         <div
             className="bg-cardGlass backdrop-blur-md rounded-glass shadow-glass border border-slate-800 p-6 flex flex-col gap-4 transition-transform duration-200 hover:-translate-y-1 hover:shadow-2xl focus-within:ring-2 focus-within:ring-accent-emerald group"
@@ -47,17 +42,37 @@ export default function ProjectCard({ project, onViewCaseStudy }: ProjectCardPro
             {/* Short description */}
             <p className="text-slate-200 text-sm mb-2 line-clamp-3">{project.description}</p>
 
-            {/* Tech stack icons and tags */}
-            <div className="flex flex-wrap gap-2 items-center mt-auto">
-                {project.tags.map((tag) => (
-                    <span
-                        key={tag}
-                        className="flex items-center gap-1 px-2 py-1 bg-accent-slate/20 rounded text-xs text-accent-slate border border-accent-slate/30 font-medium"
-                    >
-                        {tagIcons[tag]}
-                        {tag}
-                    </span>
-                ))}
+            {/* Rewired tags: separated into Tech Stack and Tools for easier scanning */}
+            <div className="mt-auto space-y-3">
+                <div>
+                    <p className="text-[11px] uppercase tracking-wide text-slate-400 mb-2">Tech Stack</p>
+                    <div className="flex flex-wrap gap-2">
+                        {fallbackTechStack.slice(0, 4).map((tag) => (
+                            <span
+                                key={`stack-${tag}`}
+                                className="px-2 py-1 bg-accent-slate/20 rounded text-xs text-accent-slate border border-accent-slate/30 font-medium"
+                            >
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+
+                {tools.length > 0 && (
+                    <div>
+                        <p className="text-[11px] uppercase tracking-wide text-slate-400 mb-2">Tools</p>
+                        <div className="flex flex-wrap gap-2">
+                            {tools.slice(0, 4).map((tool) => (
+                                <span
+                                    key={`tool-${tool}`}
+                                    className="px-2 py-1 bg-accent-emerald/10 rounded text-xs text-emerald-400 border border-accent-emerald/30 font-medium"
+                                >
+                                    {tool}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* View Case Study button */}

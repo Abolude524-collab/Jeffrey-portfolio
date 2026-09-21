@@ -1,0 +1,135 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String   @default("Jeffrey Usman")
+  role         String   @default("admin")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Profile {
+  id                   String   @id @default(cuid())
+  name                 String   @default("Jeffrey Usman")
+  title                String   @default("Data Analyst")
+  bio                  String   @db.Text
+  profileImageUrl      String?
+  profileImagePublicId String?
+  resumeUrl            String?
+  githubUrl            String?
+  linkedinUrl          String?
+  email                String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model Project {
+  id                String         @id @default(cuid())
+  title             String
+  slug              String         @unique
+  shortDescription  String         @db.Text
+  description       String?        @db.Text
+  problem           String?        @db.Text
+  objective         String?        @db.Text
+  dataset           String?        @db.Text
+  methodology       String?        @db.Text
+  insights          String?        @db.Text
+  results           String?        @db.Text
+  challenges        String?        @db.Text
+  category          String         @default("Data Analysis")
+  tags              String[]       @default([])
+  coverImage        String
+  coverImagePublicId String?
+  githubUrl         String?
+  liveUrl           String?
+  featured          Boolean        @default(false)
+  published         Boolean        @default(true)
+  displayOrder      Int            @default(0)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  images            ProjectImage[]
+
+  @@index([slug])
+  @@index([featured])
+  @@index([published])
+  @@index([category])
+}
+
+model ProjectImage {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  url       String
+  publicId  String?
+  altText   String   @default("")
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId])
+}
+
+model Skill {
+  id          String   @id @default(cuid())
+  name        String
+  category    String   // e.g. "Data Analysis", "Visualization", "Databases", "Languages & Tools"
+  proficiency Int?     // 1-100 (optional)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+}
+
+model Experience {
+  id           String   @id @default(cuid())
+  role         String
+  organization String
+  location     String?
+  startDate    String   // e.g. "2024" or "Jan 2024"
+  endDate      String?  // e.g. "Present" or "Dec 2024"
+  current      Boolean  @default(false)
+  description  String   @db.Text
+  bulletPoints String[] @default([])
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Certification {
+  id            String   @id @default(cuid())
+  title         String
+  issuer        String
+  issueDate     String   // e.g. "2025"
+  credentialUrl String?
+  imageUrl      String?
+  imagePublicId String?
+  order         Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String   @db.Text
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([read])
+  @@index([createdAt])
+}

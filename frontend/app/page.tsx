@@ -1,213 +1,509 @@
-import Navbar from "../components/Navbar";
-import PortfolioGrid from "../components/PortfolioGrid";
-import ContactForm from "../components/ContactForm";
-import { TrendingUp, BarChart3, Zap } from "lucide-react";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import ContactForm from "@/components/contact/ContactForm";
+import Link from "next/link";
+import { prisma } from "@/lib/db/prisma";
+import {
+  TrendingUp,
+  BarChart3,
+  Database,
+  ArrowRight,
+} from "lucide-react";
 import type { Metadata } from "next";
 
+export const revalidate = 60; // Revalidate static cache every 60 seconds
+
 export const metadata: Metadata = {
-    title: "Data Analyst Portfolio | Jeffrey Usman",
-    description: "Turning Raw Data into Business Strategy",
+  title: "Jeffrey Usman | Data Analyst Portfolio & Case Studies",
+  description: "Turning raw data into strategic business insights using SQL, Python, Power BI, and statistical modeling.",
+  openGraph: {
+    title: "Jeffrey Usman | Data Analyst Portfolio",
+    description: "Turning raw data into strategic business insights.",
+    url: "https://jeffreyusman.com",
+    siteName: "Jeffrey Usman Portfolio",
+    type: "website",
+  },
 };
 
-export default function HomePage() {
-    return (
-        <>
-            <Navbar />
+const fallbackProjects = [
+  {
+    id: "1",
+    title: "Sales Data Cleaning & Power BI Dashboard",
+    slug: "sales-performance-analysis",
+    shortDescription: "Transformed raw sales data across 3 regional sources and built an interactive Power BI dashboard for executive decision-making.",
+    category: "Data Analysis",
+    tags: ["SQL", "PowerBI", "Pandas", "Python", "Data Cleaning"],
+    coverImage: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
+    featured: true,
+  },
+  {
+    id: "2",
+    title: "Customer Churn Analysis with Python & SQL",
+    slug: "telecom-customer-churn-analysis",
+    shortDescription: "Analyzed telecom subscriber churn data, conducted exploratory data analysis with Pandas & SQL, and delivered predictive retention strategies.",
+    category: "Predictive Analytics",
+    tags: ["SQL", "Python", "Pandas", "Statistics"],
+    coverImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
+    featured: true,
+  },
+  {
+    id: "3",
+    title: "E-Commerce Analytics & Behavior Dashboard",
+    slug: "ecommerce-analytics-dashboard",
+    shortDescription: "Engineered a unified data pipeline and interactive analytics dashboard to evaluate user conversion funnels and product catalog performance.",
+    category: "Business Intelligence",
+    tags: ["SQL", "PowerBI", "Data Modeling"],
+    coverImage: "https://images.unsplash.com/photo-1556155092-490a1ba16284?w=800&h=600&fit=crop",
+    featured: true,
+  }
+];
 
-            <main>
-                {/* Hero Section */}
-                <section className="relative min-h-screen flex items-center justify-center pt-20 pb-16 px-4 overflow-hidden">
-                    {/* Background decoration */}
-                    <div className="absolute inset-0 -z-10">
-                        <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl"></div>
-                        <div className="absolute bottom-10 right-10 w-96 h-96 bg-teal-500/5 rounded-full blur-3xl"></div>
+const fallbackSkills = [
+  { id: "s1", name: "SQL", category: "Data Analysis" },
+  { id: "s2", name: "Python", category: "Data Analysis" },
+  { id: "s3", name: "Pandas & NumPy", category: "Data Analysis" },
+  { id: "s4", name: "Excel", category: "Data Analysis" },
+  { id: "s5", name: "Power BI", category: "Data Visualization" },
+  { id: "s6", name: "Tableau", category: "Data Visualization" },
+  { id: "s7", name: "PostgreSQL", category: "Database" },
+  { id: "s8", name: "Business Intelligence", category: "Business Intelligence" },
+];
+
+const fallbackExperiences = [
+  {
+    id: "e1",
+    role: "Senior Data Analyst",
+    organization: "Freelance / Analytics Consultant",
+    startDate: "2024",
+    endDate: "Present",
+    description: "Delivering end-to-end data analytics solutions, BI dashboards, and data cleaning pipelines for commercial clients.",
+    bulletPoints: [
+      "Architected custom SQL queries and Power BI dashboards to track client sales KPIs across multi-channel platforms.",
+      "Performed customer churn analysis and exploratory data analysis using Python Pandas.",
+    ],
+  }
+];
+
+const fallbackCertifications = [
+  {
+    id: "c1",
+    title: "Google Data Analytics Professional Certificate",
+    issuer: "Coursera / Google",
+    issueDate: "2024",
+    credentialUrl: "https://coursera.org",
+    imageUrl: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop",
+  },
+  {
+    id: "c2",
+    title: "Microsoft Certified: Power BI Data Analyst Associate",
+    issuer: "Microsoft",
+    issueDate: "2024",
+    credentialUrl: "https://learn.microsoft.com",
+    imageUrl: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400&h=300&fit=crop",
+  }
+];
+
+export default async function HomePage() {
+  let profile = null;
+  let projects = fallbackProjects;
+  let skills = fallbackSkills;
+  let experiences = fallbackExperiences;
+  let certifications = fallbackCertifications;
+
+  try {
+    const [dbProfile, dbProjects, dbSkills, dbExperiences, dbCerts] = await Promise.all([
+      prisma.profile.findFirst(),
+      prisma.project.findMany({
+        where: { published: true, featured: true },
+        orderBy: [{ displayOrder: "asc" }, { createdAt: "desc" }],
+        take: 6,
+      }),
+      prisma.skill.findMany({
+        orderBy: [{ category: "asc" }, { order: "asc" }],
+      }),
+      prisma.experience.findMany({
+        orderBy: [{ order: "asc" }],
+      }),
+      prisma.certification.findMany({
+        orderBy: [{ order: "asc" }],
+      }),
+    ]);
+
+    if (dbProfile) profile = dbProfile;
+    if (dbProjects && dbProjects.length > 0) projects = dbProjects;
+    if (dbSkills && dbSkills.length > 0) skills = dbSkills;
+    if (dbExperiences && dbExperiences.length > 0) experiences = dbExperiences;
+    if (dbCerts && dbCerts.length > 0) certifications = dbCerts;
+  } catch (err) {
+    // Database connection fallback during build-time static generation
+  }
+
+  // Group skills by category
+  const skillCategories: Record<string, typeof skills> = {};
+  skills.forEach((s) => {
+    if (!skillCategories[s.category]) skillCategories[s.category] = [];
+    skillCategories[s.category].push(s);
+  });
+
+  return (
+    <div className="min-h-screen bg-[#0B0F17] text-slate-100 font-sans selection:bg-emerald-500 selection:text-white">
+      <Navbar />
+
+      <main>
+        {/* 1. HERO SECTION */}
+        <section className="relative pt-36 pb-24 md:pt-44 md:pb-32 px-6 overflow-hidden border-b border-slate-800/80">
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#1f293715_1px,transparent_1px),linear-gradient(to_bottom,#1f293715_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-emerald-500/10 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
+
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-7 space-y-6">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 text-xs font-semibold tracking-wide">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>DATA-DRIVEN DECISION MAKING</span>
+              </div>
+
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-100 leading-[1.1]">
+                JEFFREY USMAN
+                <span className="block text-2xl sm:text-4xl text-slate-400 font-medium mt-2">
+                  Data Analyst turning raw data into <span className="text-emerald-400 font-semibold underline decoration-emerald-500/40 decoration-2 underline-offset-8">actionable insights</span>.
+                </span>
+              </h1>
+
+              <p className="text-slate-400 text-base sm:text-lg leading-relaxed max-w-2xl">
+                {profile?.bio ||
+                  "Specialized in SQL, Power BI, Python, and statistical analysis. I clean complex datasets, build executive dashboards, and uncover revenue opportunities."}
+              </p>
+
+              <div className="flex flex-wrap gap-4 pt-4">
+                <Link
+                  href="/projects"
+                  className="px-7 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg text-sm transition-all shadow-xl shadow-emerald-500/20 hover:shadow-emerald-500/30 flex items-center gap-2"
+                >
+                  <span>View My Work</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  href="#contact"
+                  className="px-7 py-3.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 hover:text-emerald-400 font-semibold rounded-lg text-sm transition-all"
+                >
+                  Contact Me
+                </Link>
+              </div>
+            </div>
+
+            {/* Visual Hero Panel */}
+            <div className="lg:col-span-5 relative">
+              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur-xl relative overflow-hidden">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-red-500/60"></div>
+                    <div className="w-3 h-3 rounded-full bg-amber-500/60"></div>
+                    <div className="w-3 h-3 rounded-full bg-emerald-500/60"></div>
+                  </div>
+                  <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">analytical_dashboard.sql</span>
+                </div>
+
+                <div className="space-y-4 font-mono text-xs">
+                  <div className="p-3 bg-slate-950/80 rounded-lg border border-slate-800/80 text-slate-300">
+                    <span className="text-emerald-400 font-bold">SELECT</span> region, <span className="text-emerald-400 font-bold">SUM</span>(revenue) <span className="text-emerald-400 font-bold">AS</span> total_sales
+                    <br />
+                    <span className="text-emerald-400 font-bold">FROM</span> executive_sales_data
+                    <br />
+                    <span className="text-emerald-400 font-bold">WHERE</span> status = <span className="text-amber-300">&apos;Completed&apos;</span>
+                    <br />
+                    <span className="text-emerald-400 font-bold">GROUP BY</span> region
+                    <br />
+                    <span className="text-emerald-400 font-bold">ORDER BY</span> total_sales <span className="text-emerald-400 font-bold">DESC</span>;
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 pt-2">
+                    <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-lg">
+                      <p className="text-[10px] text-emerald-400 font-semibold">QUERY EXECUTION TIME</p>
+                      <p className="text-lg font-bold text-slate-100 mt-0.5">0.042s</p>
+                    </div>
+                    <div className="bg-slate-800/50 border border-slate-700/50 p-3 rounded-lg">
+                      <p className="text-[10px] text-slate-400 font-semibold">RECORDS ANALYZED</p>
+                      <p className="text-lg font-bold text-slate-100 mt-0.5">50,000+</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 2. TRUST & QUICK CREDIBILITY FACTS */}
+        <section className="py-12 bg-slate-900/40 border-b border-slate-800/80">
+          <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="text-center md:text-left border-r last:border-0 border-slate-800/60 pr-4">
+              <p className="text-3xl sm:text-4xl font-bold text-emerald-400 tracking-tight">01+</p>
+              <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mt-1">Years Experience</p>
+            </div>
+            <div className="text-center md:text-left border-r last:border-0 border-slate-800/60 pr-4">
+              <p className="text-3xl sm:text-4xl font-bold text-emerald-400 tracking-tight">{projects.length}+</p>
+              <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mt-1">Verified Case Studies</p>
+            </div>
+            <div className="text-center md:text-left border-r last:border-0 border-slate-800/60 pr-4">
+              <p className="text-3xl sm:text-4xl font-bold text-emerald-400 tracking-tight">{certifications.length}</p>
+              <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mt-1">Certifications</p>
+            </div>
+            <div className="text-center md:text-left">
+              <p className="text-3xl sm:text-4xl font-bold text-emerald-400 tracking-tight">{skills.length}</p>
+              <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mt-1">Tools & Technologies</p>
+            </div>
+          </div>
+        </section>
+
+        {/* 3. ABOUT SECTION */}
+        <section id="about" className="py-24 px-6 border-b border-slate-800/80">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            <div className="lg:col-span-5 space-y-4">
+              <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">ABOUT JEFFREY</span>
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight">
+                Solving complex business problems through analytical rigor.
+              </h2>
+            </div>
+
+            <div className="lg:col-span-7 space-y-6 text-slate-300 leading-relaxed text-sm sm:text-base">
+              <p>
+                My analytical approach combines technical expertise in SQL query optimization, Python exploratory data analysis (Pandas/NumPy), and interactive Power BI dashboard development.
+              </p>
+              <p>
+                Instead of simply delivering charts, I focus on the underlying business problem—whether identifying customer churn drivers, standardizing regional sales records, or optimizing conversion funnels.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6 border-t border-slate-800">
+                <div className="space-y-1">
+                  <TrendingUp className="w-5 h-5 text-emerald-400" />
+                  <h3 className="font-semibold text-slate-100 text-sm">Data Cleaning</h3>
+                  <p className="text-xs text-slate-400">Imputation, deduplication, and pipeline automation.</p>
+                </div>
+                <div className="space-y-1">
+                  <BarChart3 className="w-5 h-5 text-emerald-400" />
+                  <h3 className="font-semibold text-slate-100 text-sm">Visualization</h3>
+                  <p className="text-xs text-slate-400">Power BI DAX, Tableau, & executive dashboards.</p>
+                </div>
+                <div className="space-y-1">
+                  <Database className="w-5 h-5 text-emerald-400" />
+                  <h3 className="font-semibold text-slate-100 text-sm">SQL Modeling</h3>
+                  <p className="text-xs text-slate-400">Star-schema architecture, joins, & aggregations.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 4. FEATURED PROJECTS SECTION */}
+        <section id="projects" className="py-24 px-6 bg-slate-900/30 border-b border-slate-800/80">
+          <div className="max-w-7xl mx-auto space-y-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div>
+                <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">SELECTED WORK</span>
+                <h2 className="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight mt-1">
+                  Projects built around real problems.
+                </h2>
+              </div>
+              <Link
+                href="/projects"
+                className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1.5"
+              >
+                <span>View All Projects</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {projects.map((project) => (
+                <div
+                  key={project.id}
+                  className="bg-slate-900/90 border border-slate-800 rounded-xl overflow-hidden hover:border-emerald-500/40 transition-all flex flex-col justify-between group shadow-xl"
+                >
+                  <div>
+                    <div className="h-52 relative overflow-hidden bg-slate-950">
+                      <img
+                        src={project.coverImage}
+                        alt={project.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute top-3 left-3 px-3 py-1 bg-slate-950/80 backdrop-blur-md border border-slate-800 rounded-full text-[10px] font-bold text-emerald-400 uppercase">
+                        {project.category}
+                      </div>
                     </div>
 
-                    <div className="max-w-4xl mx-auto text-center">
-                        <div className="mb-8 inline-block">
-                            <div className="px-4 py-2 rounded-full border border-emerald-400/30 bg-emerald-400/10">
-                                <p className="text-sm text-emerald-300">Data-Driven Decision Making</p>
-                            </div>
-                        </div>
+                    <div className="p-6 space-y-3">
+                      <h3 className="font-bold text-slate-100 text-lg group-hover:text-emerald-400 transition-colors line-clamp-1">
+                        {project.title}
+                      </h3>
+                      <p className="text-xs text-slate-400 line-clamp-3 leading-relaxed">
+                        {project.shortDescription}
+                      </p>
 
-                        <h1 className="text-5xl md:text-7xl font-bold text-slate-100 mb-6 leading-tight tracking-tight">
-                            Transform Raw Data Into <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">Strategic Insights</span>
-                        </h1>
-
-                        <p className="text-lg md:text-xl text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed">
-                            Expert data analyst specialized in SQL, Power BI, and Python. I uncover hidden patterns and drive business impact through analytics.
-                        </p>
-
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <a
-                                href="#projects"
-                                className="px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-emerald-500/25 hover:-translate-y-0.5"
-                            >
-                                View Projects
-                            </a>
-                            <a
-                                href="#contact"
-                                className="px-8 py-3 border border-slate-700 hover:border-emerald-400 text-slate-300 hover:text-emerald-400 font-semibold rounded-lg transition-all"
-                            >
-                                Get In Touch
-                            </a>
-                        </div>
-
-                        {/* Stats */}
-                        <div className="mt-16 grid grid-cols-3 gap-6 md:gap-12">
-                            <div>
-                                <p className="text-3xl font-bold text-emerald-400">50K+</p>
-                                <p className="text-sm text-slate-400 mt-1">Data Points Analyzed</p>
-                            </div>
-                            <div>
-                                <p className="text-3xl font-bold text-emerald-400">15+</p>
-                                <p className="text-sm text-slate-400 mt-1">Projects Completed</p>
-                            </div>
-                            <div>
-                                <p className="text-3xl font-bold text-emerald-400">3x</p>
-                                <p className="text-sm text-slate-400 mt-1">Avg. Efficiency Gain</p>
-                            </div>
-                        </div>
+                      <div className="flex flex-wrap gap-1.5 pt-2">
+                        {project.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="px-2.5 py-1 bg-slate-800/80 border border-slate-700/60 rounded-md text-[10px] font-medium text-slate-300"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                </section>
+                  </div>
 
-                {/* Tech Stack */}
-                <section className="py-16 px-4 bg-slate-800/30 border-t border-b border-slate-800">
-                    <div className="max-w-7xl mx-auto">
-                        <h2 className="text-center text-slate-300 font-semibold mb-8">Tech Stack & Tools</h2>
-                        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                            {["SQL", "Python", "Pandas", "Power BI", "Excel"].map((tech) => (
-                                <div
-                                    key={tech}
-                                    className="p-4 rounded-lg border border-slate-700 bg-slate-800/40 text-center hover:border-emerald-400/50 transition-colors"
-                                >
-                                    <p className="text-sm font-semibold text-slate-300">{tech}</p>
-                                </div>
-                            ))}
-                        </div>
+                  <div className="p-6 pt-0">
+                    <Link
+                      href={`/projects/${project.slug}`}
+                      className="inline-flex items-center gap-2 text-xs font-bold text-emerald-400 hover:text-emerald-300 transition-colors pt-4 border-t border-slate-800 w-full"
+                    >
+                      <span>View Case Study</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 5. SKILLS SECTION */}
+        <section id="skills" className="py-24 px-6 border-b border-slate-800/80">
+          <div className="max-w-7xl mx-auto space-y-12">
+            <div>
+              <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">TECHNICAL CAPABILITIES</span>
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight mt-1">
+                Skills & Data Stack
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {Object.entries(skillCategories).map(([category, items]) => (
+                <div key={category} className="bg-slate-900/60 border border-slate-800 rounded-xl p-6 space-y-4">
+                  <h3 className="font-bold text-slate-100 text-xs uppercase tracking-wider border-b border-slate-800 pb-3 text-emerald-400">
+                    {category}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {items.map((skill) => (
+                      <span
+                        key={skill.id}
+                        className="px-3 py-1.5 bg-slate-950/80 border border-slate-800 rounded-lg text-xs font-semibold text-slate-200"
+                      >
+                        {skill.name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 6. EXPERIENCE TIMELINE */}
+        <section id="experience" className="py-24 px-6 bg-slate-900/30 border-b border-slate-800/80">
+          <div className="max-w-4xl mx-auto space-y-12">
+            <div>
+              <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">CAREER PATH</span>
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight mt-1">
+                Work History & Experience
+              </h2>
+            </div>
+
+            <div className="space-y-8 relative before:absolute before:inset-0 before:left-3 md:before:left-1/2 before:w-0.5 before:bg-slate-800">
+              {experiences.map((exp, idx) => (
+                <div
+                  key={exp.id}
+                  className={`relative flex flex-col md:flex-row items-start ${
+                    idx % 2 === 0 ? "md:flex-row-reverse text-left" : ""
+                  }`}
+                >
+                  <div className="absolute left-3 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-emerald-500 border-4 border-[#0B0F17] z-10"></div>
+                  <div className="ml-8 md:ml-0 md:w-1/2 px-4 space-y-2">
+                    <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-6 shadow-xl">
+                      <span className="text-[10px] font-mono text-emerald-400 font-bold uppercase tracking-wider">
+                        {exp.startDate} - {exp.endDate || "Present"}
+                      </span>
+                      <h3 className="font-bold text-slate-100 text-base mt-1">{exp.role}</h3>
+                      <p className="text-xs text-slate-400 font-medium">@ {exp.organization}</p>
+                      <p className="text-xs text-slate-300 mt-3 leading-relaxed">{exp.description}</p>
+
+                      {exp.bulletPoints && exp.bulletPoints.length > 0 && (
+                        <ul className="mt-3 space-y-1.5 text-xs text-slate-400">
+                          {exp.bulletPoints.map((bp, i) => (
+                            <li key={i} className="flex items-start gap-2">
+                              <span className="text-emerald-400 shrink-0">•</span>
+                              <span>{bp}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
-                </section>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-                {/* About Section */}
-                <section id="about" className="py-20 px-4">
-                    <div className="max-w-3xl mx-auto">
-                        <h2 className="text-4xl font-bold text-slate-100 mb-8">About Me</h2>
-                        <div className="space-y-6 text-slate-400 leading-relaxed">
-                            <p className="text-lg">
-                                My journey began in web development, where I learned to build robust, user-focused applications. Over time, my passion shifted toward data—uncovering patterns, cleaning messy datasets, and transforming numbers into actionable business insights.
-                            </p>
-                            <p>
-                                Today, I specialize in data analysis, blending technical expertise in SQL, Power BI, and Python (Pandas) with a strong sense for business impact. My approach is analytical, detail-oriented, and always focused on driving strategic decisions through data clarity.
-                            </p>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 pt-8 border-t border-slate-800">
-                                <div className="flex gap-4">
-                                    <TrendingUp className="w-6 h-6 text-emerald-400 flex-shrink-0" />
-                                    <div>
-                                        <h3 className="font-semibold text-slate-100">Data Analysis</h3>
-                                        <p className="text-sm text-slate-500">SQL, Python, statistical modeling</p>
-                                    </div>
-                                </div>
-                                <div className="flex gap-4">
-                                    <BarChart3 className="w-6 h-6 text-emerald-400 flex-shrink-0" />
-                                    <div>
-                                        <h3 className="font-semibold text-slate-100">Visualization</h3>
-                                        <p className="text-sm text-slate-500">Power BI, dashboards, insights</p>
-                                    </div>
-                                </div>
-                                <div className="flex gap-4">
-                                    <Zap className="w-6 h-6 text-emerald-400 flex-shrink-0" />
-                                    <div>
-                                        <h3 className="font-semibold text-slate-100">Optimization</h3>
-                                        <p className="text-sm text-slate-500">Efficiency, automation, strategy</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+        {/* 7. CERTIFICATIONS SECTION */}
+        <section className="py-24 px-6 border-b border-slate-800/80">
+          <div className="max-w-7xl mx-auto space-y-12">
+            <div>
+              <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">VERIFIED CREDENTIALS</span>
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight mt-1">
+                Certifications
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {certifications.map((cert) => (
+                <div key={cert.id} className="bg-slate-900/60 border border-slate-800 rounded-xl p-6 space-y-4">
+                  {cert.imageUrl && (
+                    <div className="h-36 rounded-lg overflow-hidden bg-slate-950 border border-slate-800">
+                      <img src={cert.imageUrl} alt={cert.title} className="w-full h-full object-cover" />
                     </div>
-                </section>
+                  )}
+                  <div>
+                    <h3 className="font-bold text-slate-100 text-sm">{cert.title}</h3>
+                    <p className="text-xs text-slate-400 mt-1">{cert.issuer} • {cert.issueDate}</p>
+                  </div>
+                  {cert.credentialUrl && (
+                    <a
+                      href={cert.credentialUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:underline"
+                    >
+                      <span>View Credential</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-                {/* Projects Section */}
-                <section id="projects" className="py-20 px-4 bg-slate-800/20 border-t border-b border-slate-800">
-                    <div className="max-w-7xl mx-auto">
-                        <div className="mb-12">
-                            <h2 className="text-4xl font-bold text-slate-100 mb-4">Featured Projects</h2>
-                            <p className="text-slate-400">Explore my data analysis work across various domains</p>
-                        </div>
-                        <PortfolioGrid />
-                    </div>
-                </section>
+        {/* 8. CONTACT SECTION */}
+        <section id="contact" className="py-24 px-6">
+          <div className="max-w-4xl mx-auto space-y-12">
+            <div className="text-center space-y-3">
+              <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">GET IN TOUCH</span>
+              <h2 className="text-3xl sm:text-5xl font-bold text-slate-100 tracking-tight">
+                HAVE A PROJECT IN MIND?
+              </h2>
+              <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto">
+                Let&apos;s turn your messy data into clear strategic direction. Available for consulting and full-time roles.
+              </p>
+            </div>
 
-                {/* Contact Section */}
-                <section id="contact" className="py-20 px-4">
-                    <div className="max-w-4xl mx-auto">
-                        <div className="text-center mb-12">
-                            <h2 className="text-4xl font-bold text-slate-100 mb-4">Let's Connect</h2>
-                            <p className="text-slate-400">Ready to discuss your data analytics needs?</p>
-                        </div>
+            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-8 sm:p-10 shadow-2xl backdrop-blur-xl">
+              <ContactForm />
+            </div>
+          </div>
+        </section>
+      </main>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                            {/* Contact Form */}
-                            <div className="bg-slate-800/40 border border-slate-700 rounded-lg p-8">
-                                <h3 className="text-lg font-semibold text-slate-100 mb-6">Send me a message</h3>
-                                <ContactForm />
-                            </div>
-
-                            {/* Info & Links */}
-                            <div className="space-y-8">
-                                <div>
-                                    <h3 className="text-lg font-semibold text-slate-100 mb-4">Get my resume</h3>
-                                    <a
-                                        href="/resume.pdf"
-                                        download
-                                        className="inline-block px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-emerald-500/25 hover:-translate-y-0.5"
-                                    >
-                                        Download Resume
-                                    </a>
-                                </div>
-
-                                <div>
-                                    <h3 className="text-lg font-semibold text-slate-100 mb-4">Connect on social</h3>
-                                    <div className="flex gap-4">
-                                        <a
-                                            href="https://www.linkedin.com/in/jeffrey-usman-a0b953352"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="p-4 rounded-lg border border-slate-700 hover:border-emerald-400 hover:bg-emerald-400/10 transition-all"
-                                            aria-label="LinkedIn"
-                                        >
-                                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24" className="text-emerald-400">
-                                                <path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-9h3v9zm-1.5-10.28c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm15.5 10.28h-3v-4.5c0-1.08-.02-2.47-1.5-2.47-1.5 0-1.73 1.17-1.73 2.39v4.58h-3v-9h2.89v1.23h.04c.4-.75 1.38-1.54 2.84-1.54 3.04 0 3.6 2 3.6 4.59v4.72z" />
-                                            </svg>
-                                        </a>
-                                        <a
-                                            href="https://github.com/jeffrey-wonder06"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="p-4 rounded-lg border border-slate-700 hover:border-emerald-400 hover:bg-emerald-400/10 transition-all"
-                                            aria-label="GitHub"
-                                        >
-                                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24" className="text-emerald-400">
-                                                <path d="M12 0c-6.63 0-12 5.37-12 12 0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.085 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.775.418-1.305.762-1.605-2.665-.305-5.466-1.332-5.466-5.93 0-1.31.468-2.38 1.236-3.22-.124-.303-.535-1.527.117-3.176 0 0 1.008-.322 3.3 1.23.96-.267 1.98-.399 3-.404 1.02.005 2.04.137 3 .404 2.29-1.552 3.297-1.23 3.297-1.23.653 1.649.242 2.873.12 3.176.77.84 1.235 1.91 1.235 3.22 0 4.61-2.803 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.898-.015 3.293 0 .322.216.694.825.576 4.765-1.587 8.2-6.086 8.2-11.384 0-6.63-5.373-12-12-12z" />
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div className="pt-6 border-t border-slate-700">
-                                    <p className="text-sm text-slate-500">
-                                        Available for freelance projects and full-time opportunities.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Footer */}
-                <footer className="border-t border-slate-800 py-8 px-4 text-center text-sm text-slate-500">
-                    <p>&copy; {new Date().getFullYear()} Jeffrey Usman. All rights reserved.</p>
-                </footer>
-            </main>
-        </>
-    );
+      <Footer />
+    </div>
+  );
 }
