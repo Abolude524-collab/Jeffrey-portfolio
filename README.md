@@ -150,4 +150,4 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-Developed with ❤️ using Next.js 14, TypeScript, Tailwind CSS, Prisma, and Neon DB.
+Used Next.js 14, TypeScript, Tailwind CSS, Prisma, and Neon DB.
