@@ -74,7 +74,7 @@ export default function AdminSidebar({ mobileOpen, onCloseMobile }: AdminSidebar
         )}
       </div>
 
-      <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto">
+      <nav data-tour="sidebar-nav" className="flex-1 p-4 space-y-1.5 overflow-y-auto">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;
@@ -84,6 +84,7 @@ export default function AdminSidebar({ mobileOpen, onCloseMobile }: AdminSidebar
             <Link
               key={item.href}
               href={item.href}
+              data-tour={isMessages ? "messages-badge" : undefined}
               onClick={onCloseMobile}
               className={`flex items-center justify-between px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
                 isActive
@@ -110,12 +111,14 @@ export default function AdminSidebar({ mobileOpen, onCloseMobile }: AdminSidebar
         <Link
           href="/"
           target="_blank"
+          data-tour="public-site-link"
           onClick={onCloseMobile}
           className="flex items-center gap-2.5 px-4 py-2 rounded-lg text-xs text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all"
         >
           <ExternalLink className="w-4 h-4 text-emerald-400" />
           <span>View Public Site</span>
         </Link>
+
         <button
           onClick={() => {
             onCloseMobile?.();

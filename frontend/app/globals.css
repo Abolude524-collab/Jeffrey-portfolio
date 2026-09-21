@@ -1,6 +1,9 @@
+@import "shepherd.js/dist/css/shepherd.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 * {
   scroll-behavior: smooth;
@@ -155,3 +158,100 @@ body {
       rotateZ(-360deg) translateZ(10px) rotateY(var(--tilt, 12deg));
   }
 }
+
+/* Custom Shepherd.js Tour Modal Dark Glass Theme */
+.shepherd-element {
+  background: #0f172a !important;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75), 0 0 20px rgba(16, 185, 129, 0.2) !important;
+  color: #f1f5f9 !important;
+  max-width: 420px !important;
+  padding: 1.25rem !important;
+  font-family: inherit !important;
+  z-index: 99999 !important;
+}
+
+.shepherd-arrow::before {
+  background: #0f172a !important;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+}
+
+.shepherd-header {
+  background: transparent !important;
+  padding: 0 0 0.75rem 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.6) !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.shepherd-title {
+  color: #f8fafc !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.shepherd-cancel-icon {
+  color: #94a3b8 !important;
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  transition: color 0.2s !important;
+}
+
+.shepherd-cancel-icon:hover {
+  color: #10b981 !important;
+}
+
+.shepherd-text {
+  color: #cbd5e1 !important;
+  font-size: 0.85rem !important;
+  line-height: 1.55 !important;
+  padding: 0 0 1rem 0 !important;
+}
+
+.shepherd-footer {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding-top: 0.75rem !important;
+  border-top: 1px solid rgba(51, 65, 85, 0.5) !important;
+}
+
+.shepherd-button {
+  border-radius: 0.5rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  padding: 0.5rem 1rem !important;
+  transition: all 0.2s !important;
+  cursor: pointer !important;
+}
+
+.shepherd-button-primary {
+  background: #10b981 !important;
+  color: #022c22 !important;
+  border: none !important;
+}
+
+.shepherd-button-primary:hover {
+  background: #34d399 !important;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.4) !important;
+}
+
+.shepherd-button-secondary {
+  background: rgba(30, 41, 59, 0.8) !important;
+  color: #94a3b8 !important;
+  border: 1px solid #334155 !important;
+}
+
+.shepherd-button-secondary:hover {
+  background: #334155 !important;
+  color: #f8fafc !important;
+}
+
+.shepherd-modal-overlay-container {
+  opacity: 0.75 !important;
+}
+

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminHeader from "@/components/admin/AdminHeader";
+import AdminTourDirector from "@/components/admin/AdminTourDirector";
 import Link from "next/link";
 import {
   Folder,
@@ -65,6 +66,7 @@ export default function AdminDashboardPage() {
   return (
     <div className="flex min-h-screen bg-[#0B0F17]">
       <AdminSidebar mobileOpen={mobileOpen} onCloseMobile={() => setMobileOpen(false)} />
+      <AdminTourDirector autoStart={true} />
 
       <main className="flex-1 min-w-0">
         <AdminHeader
@@ -75,7 +77,7 @@ export default function AdminDashboardPage() {
 
         <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 max-w-7xl mx-auto">
           {/* Stats Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+          <div data-tour="dashboard-stats" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
             <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 sm:p-5">
               <div className="flex items-center justify-between text-slate-400 mb-2">
                 <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider">Total Projects</span>
@@ -126,7 +128,7 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* Quick Action Banner */}
-          <div className="bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-900 border border-emerald-500/20 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div data-tour="create-project-banner" className="bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-900 border border-emerald-500/20 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <h3 className="text-base sm:text-lg font-bold text-slate-100 mb-1">Add a New Case Study</h3>
               <p className="text-xs text-slate-400 max-w-xl">
@@ -143,7 +145,7 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* Recent Projects Table */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
+          <div data-tour="recent-projects" className="bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
             <div className="p-4 sm:p-6 border-b border-slate-800 flex items-center justify-between">
               <div>
                 <h3 className="font-bold text-slate-100 text-sm sm:text-base">Recent Portfolio Projects</h3>
@@ -202,3 +204,4 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
+

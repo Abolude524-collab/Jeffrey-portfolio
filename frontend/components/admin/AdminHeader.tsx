@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Menu } from "lucide-react";
+import { Menu, Compass } from "lucide-react";
+import { startAdminTour } from "@/components/admin/AdminTourDirector";
 
 interface AdminHeaderProps {
   title: string;
@@ -40,7 +41,17 @@ export default function AdminHeader({ title, subtitle, onOpenMobileNav }: AdminH
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2.5 sm:gap-3">
+        <button
+          onClick={() => startAdminTour()}
+          data-tour="tour-director-btn"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-semibold transition-all shadow-sm shadow-emerald-500/10 active:scale-95"
+          title="Start Admin Guided Tour"
+        >
+          <Compass className="w-4 h-4 animate-spin-slow text-emerald-400" />
+          <span className="hidden sm:inline">Take Tour</span>
+        </button>
+
         <div className="flex items-center gap-2.5 bg-slate-800/60 border border-slate-700/60 rounded-full py-1 px-3 sm:py-1.5 sm:px-4">
           <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">
             {adminName.charAt(0)}
@@ -51,3 +62,4 @@ export default function AdminHeader({ title, subtitle, onOpenMobileNav }: AdminH
     </header>
   );
 }
+
